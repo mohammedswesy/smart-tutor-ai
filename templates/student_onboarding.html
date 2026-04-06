@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعداد ملفك | Smart Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .form-section h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.error {
+            background: #fee;
+            color: #c33;
+            border-left: 4px solid #c33;
+            display: block;
+        }
+
+        .alert.success {
+            background: #efe;
+            color: #3c3;
+            border-left: 4px solid #3c3;
+            display: block;
+        }
+
+        .required {
+            color: #c33;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .form-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="header-icon">🎓</span>
+            <h1>أكمل ملفك الشخصي</h1>
+            <p>دعنا نعرف المزيد عن احتياجاتك التعليمية</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <form id="onboardingForm" method="POST" action="{{ url_for('save_student_preferences') }}">
+            <!-- Section 1: Educational Level -->
+            <div class="form-section">
+                <h3><span class="section-number">1</span> المستوى التعليمي</h3>
+                <div class="form-group">
+                    <label>ما هو مستواك الحالي؟ <span class="required">*</span></label>
+                    <select name="educational_level" required onchange="updateProgress()">
+                        <option value="">اختر المستوى...</option>
+                        <option value="elementary">ابتدائي</option>
+                        <option value="middle">متوسط</option>
+                        <option value="secondary">ثانوي</option>
+                        <option value="college">جامعي</option>
+                        <option value="professional">احترافي</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Section 2: Subjects of Interest -->
+            <div class="form-section">
+                <h3><span class="section-number">2</span> المواد المفضلة</h3>
+                <div class="form-group">
+                    <label>اختر المواد التي تهتم بها: <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <span>الرياضيات</span>
+                            <input type="checkbox" name="subjects" value="mathematics" onchange="updateProgress()">
+                        </label>
+                        <label class="checkbox-item">
+                            <span>العلوم</span>
+                            <input type="checkbox" name="subjects" value="science" onchange="updateProgress()">
+                        </label>
+                        <label class="checkbox-item">
+                            <span>اللغة الإنجليزية</span>
+                            <input type="checkbox" name="subjects" value="english" onchange="updateProgress()">
+                        </label>
+                        <label class="checkbox-item">
+                            <span>البرمجة</span>
+                            <input type="checkbox" name="subjects" value="programming" onchange="updateProgress()">
+                        </label>
+                        <label class="checkbox-item">
+                            <span>اللغة العربية</span>
+                            <input type="checkbox" name="subjects" value="arabic" onchange="updateProgress()">
+                        </label>
+                        <label class="checkbox-item">
+                            <span>التاريخ</span>
+                            <input type="checkbox" name="subjects" value="history" onchange="updateProgress()">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Learning Times -->
+            <div class="form-section">
+                <h3><span class="section-number">3</span> أوقات التعلم المفضلة</h3>
+                <div class="form-group">
+                    <label>متى تفضل الدراسة؟ <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <span>🌅 الصباح (6:00 - 12:00)</span>
+                            <input type="checkbox" name="preferred_times" value="morning" onchange="updateProgress()">
+                        </label>
+                        <label class="checkbox-item">
+                            <span>☀️ بعد الظهر (12:00 - 17:00)</span>
+                            <input type="checkbox" name="preferred_times" value="afternoon" onchange="updateProgress()">
+                        </label>
+                        <label class="checkbox-item">
+                            <span>🌙 المساء (17:00 - 22:00)</span>
+                            <input type="checkbox" name="preferred_times" value="evening" onchange="updateProgress()">
+                        </label>
+                        <label class="checkbox-item">
+                            <span>📅 نهاية الأسبوع</span>
+                            <input type="checkbox" name="preferred_times" value="weekends" onchange="updateProgress()">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Budget -->
+            <div class="form-section">
+                <h3><span class="section-number">4</span> الميزانية المتاحة</h3>
+                <div class="form-group">
+                    <label>ما هو الحد الأقصى لسعرك في الساعة؟ <span class="required">*</span></label>
+                    <select name="max_hourly_rate" required onchange="updateProgress()">
+                        <option value="">اختر الميزانية...</option>
+                        <option value="15">أقل من 15 ريال</option>
+                        <option value="25">15 - 25 ريال</option>
+                        <option value="35">25 - 35 ريال</option>
+                        <option value="50">35 - 50 ريال</option>
+                        <option value="100">أكثر من 50 ريال</option>
+                    </select>
+                    <div class="help-text">هذا يساعدنا في ترشيح المعلمين المناسبين لميزانيتك</div>
+                </div>
+            </div>
+
+            <!-- Section 5: Learning Style -->
+            <div class="form-section">
+                <h3><span class="section-number">5</span> أسلوب التعلم</h3>
+                <div class="form-group">
+                    <label>كيف تفضل التعلم؟ <span class="required">*</span></label>
+                    <select name="teaching_style" required onchange="updateProgress()">
+                        <option value="">اختر الأسلوب...</option>
+                        <option value="lecture">محاضرات منظمة</option>
+                        <option value="interactive">نقاش تفاعلي</option>
+                        <option value="one-on-one">واحد لواحد مركز</option>
+                        <option value="mixed">مزيج من الأساليب</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> حفظ التفضيلات
+                </button>
+                <button type="reset" class="btn btn-secondary">
+                    <i class="fas fa-redo"></i> إعادة تعيين
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function updateProgress() {
+            const form = document.getElementById('onboardingForm');
+            const requiredFields = form.querySelectorAll('[required]');
+            const checkboxGroups = {
+                subjects: form.querySelectorAll('input[name="subjects"]:checked'),
+                preferred_times: form.querySelectorAll('input[name="preferred_times"]:checked')
+            };
+
+            let filledRequired = 0;
+            let totalRequired = 0;
+
+            // Check required select inputs
+            requiredFields.forEach(field => {
+                if (field.type === 'select-one') {
+                    totalRequired++;
+                    if (field.value) filledRequired++;
+                }
+            });
+
+            // Check checkbox groups
+            if (checkboxGroups.subjects.length > 0) filledRequired++;
+            else totalRequired++;
+
+            if (checkboxGroups.preferred_times.length > 0) filledRequired++;
+            else totalRequired++;
+
+            const progress = Math.round((filledRequired / (totalRequired + 2)) * 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        document.getElementById('onboardingForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Validate at least one subject is selected
+            const selectedSubjects = document.querySelectorAll('input[name="subjects"]:checked');
+            if (selectedSubjects.length === 0) {
+                showAlert('يرجى اختيار مادة واحدة على الأقل', 'error');
+                return;
+            }
+
+            // Validate at least one time is selected
+            const selectedTimes = document.querySelectorAll('input[name="preferred_times"]:checked');
+            if (selectedTimes.length === 0) {
+                showAlert('يرجى اختيار وقت واحد على الأقل', 'error');
+                return;
+            }
+
+            // Convert checkboxes to comma-separated values
+            const subjectsInput = document.createElement('input');
+            subjectsInput.type = 'hidden';
+            subjectsInput.name = 'subjects_list';
+            subjectsInput.value = Array.from(selectedSubjects).map(cb => cb.value).join(',');
+            this.appendChild(subjectsInput);
+
+            const timesInput = document.createElement('input');
+            timesInput.type = 'hidden';
+            timesInput.name = 'preferred_times_list';
+            timesInput.value = Array.from(selectedTimes).map(cb => cb.value).join(',');
+            this.appendChild(timesInput);
+
+            this.submit();
+        });
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `<div class="alert ${type}">${message}</div>`;
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+
+</html>

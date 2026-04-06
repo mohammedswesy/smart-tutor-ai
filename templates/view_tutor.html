@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>View Tutor - Smart Tutor</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body { font-family:'Roboto',sans-serif; background:#f0f2f7; margin:0; padding:0; }
+header { background:#1E88E5; color:white; padding:15px 50px; display:flex; justify-content: space-between; align-items:center; }
+header h1 { font-size:26px; cursor:pointer; }
+header nav a { color:white; text-decoration:none; margin-left:25px; font-weight:500; transition:0.3s; }
+header nav a:hover { color:#BBDEFB; }
+
+.container { max-width:1200px; margin:40px auto; padding:0 20px; }
+.tutor-info { background:white; padding:25px 20px; border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,0.15); margin-bottom:40px; }
+.tutor-info h2 { margin-bottom:15px; }
+.tutor-info p { margin-bottom:8px; color:#555; }
+
+button { padding:10px 20px; background:#1E88E5; color:white; border:none; border-radius:6px; font-weight:500; cursor:pointer; transition:0.3s; }
+button:hover { background:#1565C0; }
+
+.reviews { margin-top:30px; }
+.review-card { background:white; padding:15px 20px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.1); margin-bottom:20px; }
+.review-card p { margin:5px 0; color:#555; }
+
+.rating { color:#FFC107; }
+
+.add-review { margin-top:30px; background:white; padding:20px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.15); }
+.add-review textarea { width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:10px; resize:none; }
+</style>
+</head>
+<body>
+<header>
+<h1>Smart Tutor</h1>
+<nav>
+<a href="{{ url_for('dashboard') }}">Dashboard</a>
+<a href="{{ url_for('dashboard') }}">All Tutors</a>
+
+<a href="{{ url_for('logout') }}">Logout</a>
+</nav>
+</header>
+
+<div class="container">
+<div class="tutor-info">
+<h2>{{ tutor.name }}</h2>
+<p>Subject: {{ tutor.subject }}</p>
+<p>Experience: {{ tutor.experience }} years</p>
+
+{% set full_stars = tutor.rating|int %}
+{% set half_star = 1 if tutor.rating - full_stars >= 0.5 else 0 %}
+<p class="rating">
+Rating: {{ '★' * full_stars }}{% if half_star %}½{% endif %}{{ '☆' * (5 - full_stars - half_star) }}
+</p>
+<p>Available: {{ tutor.available_time }}</p>
+
+<a href="{{ url_for('book_tutor', tutor_id=tutor.id) }}"><button>Book Now</button></a>
+</div>
+
+<div class="reviews">
+<h3>Student Reviews</h3>
+{% if reviews %}
+    {% for review in reviews %}
+    <div class="review-card">
+        <p><strong>{{ review.student_name }}</strong>:</p>
+        {% set r_full = review.rating|int %}
+        {% set r_half = 1 if review.rating - r_full >= 0.5 else 0 %}
+        <p class="rating">{{ '★' * r_full }}{% if r_half %}½{% endif %}{{ '☆' * (5 - r_full - r_half) }}</p>
+        <p>{{ review.comment }}</p>
+    </div>
+    {% endfor %}
+{% else %}
+<p>No reviews yet.</p>
+{% endif %}
+</div>
+
+{% if session['role'] == 'student' %}
+<div class="add-review">
+<h3>Add Your Review</h3>
+<form method="POST" action="{{ url_for('add_review', tutor_id=tutor.id) }}">
+    <textarea name="comment" rows="3" placeholder="Write your review..." required></textarea>
+    <br>
+    <label>Rating: 
+        <select name="rating" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </label>
+    <br><br>
+    <button type="submit">Submit Review</button>
+</form>
+</div>
+{% endif %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل ملف المعلم | Smart Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .card {
+            width: min(600px, 95%);
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,.2);
+        }
+
+        h1, h2 {
+            margin: 0 0 12px;
+            font-weight: 800;
+        }
+
+        p { color: #64748b; margin-bottom: 20px; }
+
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 18px 0 25px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            width: 0%;
+            transition: width .4s ease;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        label { display: block; font-weight: 700; margin-bottom: 5px; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dbeafe;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 11px 17px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            background: #6366f1;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .btn.secondary {
+            background: #94a3b8;
+        }
+
+        .alert {
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .alert-info { background: #dbeafe; color: #1d4ed8; }
+        .alert-success { background: #dcfce7; color: #166534; }
+        .alert-danger { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>مرحبًا بك معلمنا!</h1>
+        <p>أكمل ملفك في 3 خطوات لتظهر تلقائياً في التوصيات للطلاب الذين يناسبونك.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' if category == 'success' else 'info' }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="progress-bar"><div id="progress" class="progress-bar-fill"></div></div>
+
+        <form method="POST" action="{{ url_for('tutor_onboarding') }}" id="tutorWizard">
+            <div class="step active" data-step="1">
+                <h2>الخطوة 1: معلومات المادة والأسلوب</h2>
+                <div class="field">
+                    <label>المادة (مثال: Math، Python)</label>
+                    <input type="text" name="subject" id="subject" value="{{ tutor.subject or '' }}" required />
+                </div>
+                <div class="field">
+                    <label>مستوى الخبرة</label>
+                    <select name="experience_level" id="experience_level" required>
+                        <option value="">اختر...</option>
+                        <option value="beginner" {% if tutor.experience_level == 'beginner' %}selected{% endif %}>Beginner</option>
+                        <option value="intermediate" {% if tutor.experience_level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                        <option value="advanced" {% if tutor.experience_level == 'advanced' %}selected{% endif %}>Advanced</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>أسلوب التدريس</label>
+                    <input type="text" name="teaching_style" id="teaching_style" value="{{ tutor.teaching_style or '' }}" placeholder="تفاعلي، عملي، محاضرات" required />
+                </div>
+            </div>
+
+            <div class="step" data-step="2">
+                <h2>الخطوة 2: التوفر والميزانية</h2>
+                <div class="field">
+                    <label>أوقات التوفر</label>
+                    <input type="text" name="available_time" id="available_time" value="{{ tutor.available_time or '' }}" placeholder="مثال: صباحاً، مساءً، عطلة نهاية الأسبوع" required />
+                </div>
+                <div class="field">
+                    <label>سعر الساعة ($)</label>
+                    <input type="number" step="0.01" name="hourly_rate" id="hourly_rate" value="{{ tutor.hourly_rate or '' }}" required />
+                </div>
+            </div>
+
+            <div class="step" data-step="3">
+                <h2>الخطوة 3: نبذة مختصرة</h2>
+                <div class="field">
+                    <label>نبذة عنك</label>
+                    <textarea name="bio" id="bio" rows="5" placeholder="شارك طلابك عن خبرتك المالية والطريقة التي تدرّس بها">{{ tutor.bio or '' }}</textarea>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn secondary" id="prevBtn">السابق</button>
+                <button type="button" class="btn" id="nextBtn">التالي</button>
+                <button type="submit" class="btn" id="submitBtn" style="display:none;">حفظ وإنهاء</button>
+            </div>
+        </form>
+
+        <p style="margin-top:12px; font-size:13px; color:#64748b;">يمكنك تعديل التفاصيل لاحقاً من صفحة الإعدادات.</p>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        const showStep = (step) => {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            document.querySelector('.step[data-step="'+step+'"]').classList.add('active');
+            const progress = (step - 1) / (totalSteps - 1) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'inline-flex';
+            document.getElementById('nextBtn').style.display = step === totalSteps ? 'none' : 'inline-flex';
+            document.getElementById('submitBtn').style.display = step === totalSteps ? 'inline-flex' : 'none';
+        };
+
+        const validateStep = (step) => {
+            const inputs = [...document.querySelectorAll('.step[data-step="'+step+'"] select, .step[data-step="'+step+'"] input')];
+            return inputs.every(input => input.value.trim() !== '');
+        };
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (!validateStep(currentStep)) {
+                alert('يرجى ملء الحقول المطلوبة في هذه الخطوة.');
+                return;
+            }
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+
+        showStep(currentStep);
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>الاختبار</title>
+
+    <style>
+        body {
+            font-family: Tahoma;
+            background: #f3f4f6;
+            padding: 40px;
+        }
+
+        .quiz-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="quiz-box">
+
+        <h2>ابدأ الاختبار</h2>
+
+        <form action="{{ url_for('submit_quiz', quiz_id=quiz_id) }}" method="POST">
+
+            {% for q in questions %}
+
+            <div class="question">
+
+                <p><strong>{{ loop.index }} - {{ q.question }}</strong></p>
+
+                <textarea name="q_{{ q.id }}" rows="3" placeholder="اكتب إجابتك هنا..." required></textarea>
+
+            </div>
+
+            {% endfor %}
+
+            <button type="submit">
+                إرسال الاختبار
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

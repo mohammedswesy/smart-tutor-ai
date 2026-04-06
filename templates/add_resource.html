@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Resource - Smart Tutor</title>
+<style>
+body { font-family: 'Roboto', sans-serif; background:#f0f2f7; padding:0; margin:0; }
+header { background:#1E88E5; color:white; padding:15px 50px; display:flex; justify-content: space-between; }
+header a { color:white; text-decoration:none; margin-left:25px; }
+.container { max-width:600px; margin:40px auto; background:white; padding:20px; border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+input, textarea { width:100%; padding:10px; margin:10px 0; border-radius:6px; border:1px solid #ccc; }
+button { padding:10px 20px; background:#1E88E5; color:white; border:none; border-radius:6px; cursor:pointer; }
+button:hover { background:#1565C0; }
+</style>
+</head>
+<body>
+<header>
+<a href="{{ url_for('dashboard') }}">Dashboard</a>
+<a href="{{ url_for('logout') }}">Logout</a>
+</header>
+<div class="container">
+<h2>Add New Resource</h2>
+<form action="{{ url_for('add_resource') }}" method="POST">
+    <label>Title</label>
+    <input type="text" name="title" required>
+    <label>Description</label>
+    <textarea name="description"></textarea>
+    <label>Link (optional)</label>
+    <input type="text" name="link">
+    <button type="submit">Add Resource</button>
+</form>
+</div>
+</body>
+</html>

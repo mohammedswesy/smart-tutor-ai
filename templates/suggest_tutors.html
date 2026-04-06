@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Suggested Tutors</title>
+</head>
+<body>
+    <h2>Best Tutors for You</h2>
+
+    {% for tutor in tutors %}
+        <div style="border:1px solid #000; margin:10px; padding:10px;">
+            <h3>{{ tutor.name }}</h3>
+            <p>Subject: {{ tutor.subject }}</p>
+            <p>Experience: {{ tutor.experience }} years</p>
+            <p>Rating: {{ tutor.rating }}</p>
+            <p>Available: {{ tutor.available_time }}</p>
+            <p><b>Why?</b> {{ tutor.reason }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>نتيجة الاختبار</title>
+
+    <style>
+        body {
+            font-family: Tajawal;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .result-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            width: 400px;
+        }
+
+        .score {
+            font-size: 60px;
+            color: #10b981;
+            margin: 20px 0;
+        }
+
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="result-box">
+
+        <h2>نتيجة الاختبار</h2>
+
+        <div class="score">
+            {{ score }} / {{ total }}
+        </div>
+
+        <p>تم تصحيح الاختبار تلقائياً.</p>
+
+        <br>
+
+        <a href="{{ url_for('student_dashboard') }}">
+            <button>العودة إلى لوحة الطالب</button>
+        </a>
+
+    </div>
+
+</body>
+
+</html>

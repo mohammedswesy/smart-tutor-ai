@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات المعلم | Smart Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #64748b;
+            --border: #e5e7eb;
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --danger-bg: #fee2e2;
+            --danger-text: #b91c1c;
+            --info-bg: #dbeafe;
+            --info-text: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 25px;
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .top-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .page-head {
+            margin-bottom: 25px;
+        }
+
+        .page-head h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .page-head p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 28px;
+        }
+
+        .profile-card {
+            text-align: center;
+            height: fit-content;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            background: #eee;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .profile-card h3 {
+            margin: 0 0 6px;
+            font-size: 24px;
+        }
+
+        .profile-card p {
+            margin: 0 0 12px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            background: #e0e7ff;
+            color: var(--primary);
+        }
+
+        .stats-box {
+            margin-top: 22px;
+            text-align: right;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .stats-box div {
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .stats-box div:last-child {
+            margin-bottom: 0;
+        }
+
+        .stats-box strong {
+            color: var(--text-main);
+        }
+
+        .form-card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 15px;
+            background: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .btn-save:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 22px;
+            border-radius: 12px;
+            color: #475569;
+            text-decoration: none;
+            background: #eef2f7;
+            font-weight: 700;
+        }
+
+        .alert {
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .alert-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        .alert-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+        }
+
+        .alert-info {
+            background: var(--info-bg);
+            color: var(--info-text);
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="{{ url_for('dashboard') }}" class="top-link">
+        <i class="fas fa-arrow-right"></i>
+        العودة إلى لوحة المعلم
+    </a>
+
+    <div class="page-head">
+        <h1>إعدادات المعلم</h1>
+        <p>حدّث بيانات حسابك، الصورة الشخصية، معلوماتك المهنية، وسعر الساعة.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {% if category == 'success' %}alert-success{% elif category == 'danger' %}alert-danger{% else %}alert-info{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('settings') }}" method="POST" enctype="multipart/form-data">
+        <div class="layout">
+            <div class="card profile-card">
+                <div class="profile-pic-container">
+                    <img id="preview" src="{{ url_for('display_image', filename=tutor.profile_pic) if tutor.profile_pic else 'https://via.placeholder.com/150' }}" alt="Tutor Profile">
+                    <label for="profile_pic" class="upload-btn">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" name="profile_pic" id="profile_pic" style="display:none;" accept="image/*">
+                </div>
+
+                <h3>{{ tutor.name }}</h3>
+                <p>{{ tutor.email }}</p>
+                <span class="badge">حساب معلم نشط</span>
+
+                <div class="stats-box">
+                    <div>المادة: <strong>{{ tutor.subject or '-' }}</strong></div>
+                    <div>سعر الساعة: <strong>${{ tutor.hourly_rate or 0 }}</strong></div>
+                    <div>وقت التوفر: <strong>{{ tutor.available_time or '-' }}</strong></div>
+                </div>
+            </div>
+
+            <div class="card form-card">
+                <h2>تعديل الملف الشخصي والحساب</h2>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" name="name" value="{{ tutor.name }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" name="email" value="{{ tutor.email }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>المادة (مثال: Math, Python)</label>
+                        <input type="text" name="subject" value="{{ tutor.subject or '' }}" placeholder="مثال: الرياضيات، البرمجة">
+                    </div>
+
+                    <div class="form-group">
+                        <label>سعر الساعة ($)</label>
+                        <input type="number" step="0.01" name="hourly_rate" value="{{ tutor.hourly_rate or '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>مستوى الخبرة</label>
+                        <select name="experience_level">
+                            <option value="" {% if not tutor.experience_level %}selected{% endif %}>اختر المستوى</option>
+                            <option value="beginner" {% if tutor.experience_level == 'beginner' %}selected{% endif %}>Beginner</option>
+                            <option value="intermediate" {% if tutor.experience_level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                            <option value="advanced" {% if tutor.experience_level == 'advanced' %}selected{% endif %}>Advanced</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>أوقات التوفر</label>
+                        <input type="text" name="available_time" value="{{ tutor.available_time or '' }}" placeholder="مثال: الأحد إلى الخميس، 4م - 8م">
+                    </div>
+
+                    <div class="form-group">
+                        <label>أسلوب التدريس</label>
+                        <input type="text" name="teaching_style" value="{{ tutor.teaching_style or '' }}" placeholder="مثال: تفاعلي، عملي، نظري">
+                    </div>
+
+                    <div class="form-group full">
+                        <label>كلمة المرور الجديدة</label>
+                        <input type="password" name="password" placeholder="اتركها فارغة إذا لا تريد تغييرها">
+                        <div class="hint">لن يتم تغيير كلمة المرور الحالية إذا تركت هذا الحقل فارغًا.</div>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>نبذة عنك (Bio)</label>
+                        <textarea name="bio" rows="5" placeholder="اكتب نبذة قصيرة عن خبرتك وطريقتك في التدريس">{{ tutor.bio or '' }}</textarea>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn-save">حفظ جميع التغييرات</button>
+                    <a href="{{ url_for('dashboard') }}" class="btn-back">إلغاء والعودة</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('profile_pic').onchange = function () {
+        const [file] = this.files;
+        if (file) {
+            document.getElementById('preview').src = URL.createObjectURL(file);
+        }
+    }
+</script>
+</body>
+</html>

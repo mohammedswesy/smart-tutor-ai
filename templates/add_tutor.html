@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register Tutor - Smart Tutor</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body { font-family:'Roboto',sans-serif; background: linear-gradient(135deg,#FFB74D,#F57C00); display:flex; justify-content:center; align-items:center; height:100vh; }
+.form-box { background:white; padding:50px; border-radius:14px; box-shadow:0 15px 40px rgba(0,0,0,0.25); width:500px; }
+h2 { text-align:center; margin-bottom:30px; }
+input, button { width:100%; padding:15px; margin:12px 0; border-radius:8px; border:1px solid #ccc; }
+button { background:#F57C00; color:white; border:none; cursor:pointer; }
+.error { color:red; text-align:center; }
+</style>
+</head>
+<body>
+
+<div class="form-box">
+<h2>Register Tutor</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, msg in messages %}
+<p class="{{ category }}">{{ msg }}</p>
+{% endfor %}
+{% endwith %}
+
+<form method="POST">
+<input type="text" name="name" placeholder="Full Name" required>
+<input type="email" name="email" placeholder="Email" required>
+
+<input type="password" name="password" placeholder="Password" required
+pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}">
+
+<input type="text" name="subject" placeholder="Subject" required>
+<input type="number" name="experience" placeholder="Experience Years" min="0" required>
+<input type="number" name="rating" placeholder="Rating 1-5" min="1" max="5" required>
+<input type="text" name="available_time" placeholder="Available Time" required>
+
+<button type="submit">Register</button>
+</form>
+
+<a href="{{ url_for('login') }}">Login</a>
+</div>
+
+</body>
+</html>

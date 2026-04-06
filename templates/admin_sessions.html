@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Sessions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+        }
+
+        header {
+            background: #1E88E5;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: 500;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1300px;
+            margin: 30px auto;
+        }
+
+        .box {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #f8fbff;
+            color: #1E88E5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .badge-pending {
+            background: #FFF3E0;
+            color: #EF6C00;
+        }
+
+        .badge-confirmed {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .badge-other {
+            background: #ECEFF1;
+            color: #455A64;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-size: 13px;
+            margin-right: 6px;
+        }
+
+        .btn-green {
+            background: #43A047;
+        }
+
+        .btn-blue {
+            background: #1E88E5;
+        }
+
+        .btn-red {
+            background: #E53935;
+        }
+
+        .msg {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .danger {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .info {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div><strong>Admin - Sessions</strong></div>
+        <div>
+            <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin_students') }}">Students</a>
+            <a href="{{ url_for('admin_tutors') }}">Tutors</a>
+            <a href="{{ url_for('admin_assignments') }}">Assignments</a>
+            <a href="{{ url_for('admin_resources') }}">Resources</a>
+            <a href="{{ url_for('admin_questions') }}">Questions</a>
+            <a href="{{ url_for('admin_reviews') }}">Reviews</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="box">
+            <h2>All Sessions</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+            <div class="msg {{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endwith %}
+
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Student</th>
+                    <th>Tutor</th>
+                    <th>Session Date</th>
+                    <th>Status</th>
+                    <th>Meeting Link</th>
+                    <th>Actions</th>
+                </tr>
+
+                {% for session in sessions %}
+                <tr>
+                    <td>{{ session.id }}</td>
+                    <td>{{ session.student_name }}</td>
+                    <td>{{ session.tutor_name }}</td>
+                    <td>{{ session.session_date or '-' }}</td>
+                    <td>
+                        {% if session.status == 'pending' %}
+                        <span class="badge badge-pending">Pending</span>
+                        {% elif session.status == 'confirmed' %}
+                        <span class="badge badge-confirmed">Confirmed</span>
+                        {% else %}
+                        <span class="badge badge-other">{{ session.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if session.meeting_link %}
+                        <a href="{{ session.meeting_link }}" target="_blank">Open Link</a>
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="btn btn-green"
+                            href="{{ url_for('approve_session_admin', session_id=session.id) }}">Approve</a>
+                        <a class="btn btn-blue" href="{{ url_for('pending_session_admin', session_id=session.id) }}">Set
+                            Pending</a>
+                        <a class="btn btn-red" href="{{ url_for('delete_session_admin', session_id=session.id) }}"
+                            onclick="return confirm('Delete this session?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>

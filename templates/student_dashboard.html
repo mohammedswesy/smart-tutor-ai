@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الطالب | Smart Tutor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --card: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--light);
+            display: flex;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--dark);
+            height: 100vh;
+            position: fixed;
+            padding: 25px;
+            color: white;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .nav-item {
+            padding: 13px 15px;
+            border-radius: 12px;
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            transition: 0.3s;
+            text-decoration: none;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .main-content {
+            margin-right: 260px;
+            width: calc(100% - 260px);
+            padding: 35px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            position: relative;
+        }
+
+        .top-bar-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            margin-left: 12px;
+            background: #fff;
+        }
+
+        .notif-dropdown {
+            position: absolute;
+            top: 72px;
+            left: 20px;
+            width: 310px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            display: none;
+            z-index: 1000;
+            border: 1px solid #eee;
+            overflow: hidden;
+        }
+
+        .notif-head {
+            padding: 14px 16px;
+            font-weight: 700;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notif-item {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 13px;
+            cursor: default;
+        }
+
+        .notif-item:last-child {
+            border: none;
+        }
+
+        .notif-item.new {
+            border-right: 4px solid var(--primary);
+            background: #f5f7ff;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.35s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            margin-bottom: 22px;
+        }
+
+        .section-title h2 {
+            margin: 0 0 6px;
+            font-size: 26px;
+        }
+
+        .section-title p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 22px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border: 1px solid #edf2f7;
+        }
+
+        .tutor-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 18px;
+            text-align: right;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-confirmed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        .subject-badge {
+            background: #e0e7ff;
+            color: var(--primary);
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-ai {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .btn-ai:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            transform: translateY(-1px);
+        }
+
+        .progress {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: #34d399;
+            border-radius: 10px;
+            transition: width 0.5s ease, background 0.3s ease;
+        }
+
+        .btn-meet {
+            background: var(--success);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        .alert-banner {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 20px;
+            padding: 45px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .metric-card small {
+            display: block;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .metric-card .value {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .resource-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-box {
+            background: white;
+            width: 90%;
+            max-width: 430px;
+            margin: 100px auto;
+            padding: 35px;
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+
+        /* Quiz cards */
+        .quiz-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-card h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .quiz-card small {
+            color: #6b7280;
+        }
+
+        .quiz-done-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+            }
+
+            body {
+                flex-direction: column;
+            }
+
+            .main-content {
+                margin-right: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar">
+        <a href="{{ url_for('home') }}" class="sidebar-logo">Smart Tutor</a>
+
+        <button class="nav-item active" onclick="showSection('tutors-sec', this)">
+            <i class="fas fa-chalkboard-teacher"></i>
+            المعلمون المتاحون
+        </button>
+
+        <button class="nav-item" onclick="showSection('sessions-sec', this)">
+            <i class="fas fa-video"></i>
+            حصصي
+        </button>
+
+        <button class="nav-item" onclick="showSection('resources-sec', this)">
+            <i class="fas fa-file-lines"></i>
+            المكتبة التعليمية
+        </button>
+
+        <button class="nav-item" onclick="showSection('tasks-sec', this)">
+            <i class="fas fa-tasks"></i>
+            الواجبات
+        </button>
+
+        <!-- ✅ مربوط بقسم الاختبارات الصح -->
+        <button class="nav-item" onclick="showSection('quizzes-sec', this)">
+            <i class="fas fa-file-pen"></i>
+            الاختبارات
+        </button>
+
+        <button class="nav-item" onclick="showSection('grades-sec', this)">
+            <i class="fas fa-chart-line"></i>
+            نتائجي
+        </button>
+
+        <a href="{{ url_for('student_settings') }}" class="nav-item">
+            <i class="fas fa-user-cog"></i>
+            حسابي
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="nav-item" style="color: #fca5a5; margin-top: 40px;">
+            <i class="fas fa-sign-out-alt"></i>
+            خروج
+        </a>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-content">
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert-banner alert-{{ category if category in ['success', 'danger', 'info'] else 'info' }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Persistent onboarding/prefs reminder -->
+        <div class="alert-banner alert-info" style="display:flex; justify-content:space-between; align-items:center;">
+            <span><strong>تنبيه:</strong> التفضيلات الشخصية تحسن دقة أفضل المعلمين لك و تزيد جودة التوصية.</span>
+            {% if not preferences %}
+            <a href="{{ url_for('student_onboarding') }}" class="btn btn-primary" style="padding: 8px 12px; font-size: 13px;">أكمل الآن</a>
+            {% else %}
+            <a href="{{ url_for('edit_preferences') }}" class="btn btn-primary" style="padding: 8px 12px; font-size: 13px;">تحديث التفضيلات</a>
+            {% endif %}
+        </div>
+
+        {% if not preferences %}
+        <div class="alert-banner alert-info" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>أكمل ملفك الشخصي الآن لتحصل على توصيات أفضل بفضل الذكاء الاصطناعي.</span>
+            <a href="{{ url_for('student_onboarding') }}" class="btn btn-primary" style="padding: 8px 12px; font-size: 13px;">أكمل الملف الشخصي</a>
+        </div>
+        {% endif %}
+
+        <!-- Match info -->
+        <div id="match-summary" class="alert-banner alert-info" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+                <strong>المواد المطابقة:</strong> <span id="matched-courses">{{ matched_subjects|join(', ') }}</span>
+                <br>
+                <strong>المواد المتبقية:</strong> <span id="remaining-courses">{{ remaining_subjects|join(', ') }}</span>
+            </div>
+            <button id="refreshMatchesBtn" class="btn btn-primary" style="padding: 8px 12px; font-size: 13px;">🔄 تحديث التوصية الآن</button>
+        </div>
+
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div style="display: flex; align-items: center;">
+                <img src="{{ url_for('display_image', filename=student.profile_pic) if student.profile_pic else 'https://via.placeholder.com/100' }}"
+                    class="top-bar-img" alt="Student">
+                <div>
+                    <h1 style="margin:0; font-size: 22px;">مرحباً، {{ student.name }} 👋</h1>
+                    <p style="margin:3px 0 0; color: var(--text-muted); font-size: 13px;">جاهز لجلسة جديدة وتعلّم أفضل
+                        اليوم</p>
+                </div>
+            </div>
+
+            <div style="position: relative; display: flex; gap: 15px; align-items: center;">
+                <div class="btn" onclick="toggleNotifs()"
+                    style="background: #f1f5f9; color: var(--dark); border-radius: 50%; width: 45px; height: 45px; padding: 0; position:relative;">
+                    <i class="fas fa-bell"></i>
+                    <!-- ✅ badge عدد الإشعارات -->
+                    {% if notifications and notifications|length > 0 %}
+                    <span style="
+                        position:absolute; top:-4px; left:-4px;
+                        background:var(--danger); color:white;
+                        border-radius:50%; width:18px; height:18px;
+                        font-size:10px; font-weight:800;
+                        display:flex; align-items:center; justify-content:center;">
+                        {{ notifications|length }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- ✅ Notif Dropdown يعرض إشعارات الاختبارات + الجلسات -->
+                <div id="notifBox" class="notif-dropdown">
+                    <div class="notif-head">التنبيهات الأخيرة</div>
+
+                    {% set confirmed_sessions = sessions | selectattr('status', 'equalto', 'confirmed') | list %}
+                    {% for s in confirmed_sessions %}
+                    <div class="notif-item new">
+                        تمت الموافقة على حصتك مع <b>أ. {{ s.tutor_name }}</b>
+                    </div>
+                    {% endfor %}
+
+                    {% for n in notifications %}
+                    <div class="notif-item new">
+                        {{ n.message }}
+                    </div>
+                    {% endfor %}
+
+                    {% if not confirmed_sessions and not notifications %}
+                    <div class="notif-item">لا توجد إشعارات جديدة</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- METRICS -->
+        <div class="metric-grid">
+            <div class="metric-card">
+                <small>عدد المعلمين</small>
+                <div class="value">{{ tutors|length }}</div>
+            </div>
+            <div class="metric-card">
+                <small>عدد الجلسات</small>
+                <div class="value">{{ sessions|length }}</div>
+            </div>
+            <div class="metric-card">
+                <small>عدد الواجبات</small>
+                <div class="value">{{ assignments|length }}</div>
+            </div>
+            <div class="metric-card">
+                <small>عدد الموارد</small>
+                <div class="value">{{ resources|length }}</div>
+            </div>
+            <div class="metric-card">
+                <small>المعدل العام</small>
+                <div class="value">
+                    {% if grades and grades|length > 0 %}
+                    {% set ns = namespace(score_sum=0, total_sum=0) %}
+                    {% for g in grades %}
+                    {% set ns.score_sum = ns.score_sum + (g.score or 0) %}
+                    {% set ns.total_sum = ns.total_sum + (g.total_score or 0) %}
+                    {% endfor %}
+                    {% if ns.total_sum > 0 %}
+                    {{ ((ns.score_sum / ns.total_sum) * 100) | round(1) }}%
+                    {% else %}
+                    -
+                    {% endif %}
+                    {% else %}
+                    -
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== BEST MATCH TEACHERS ===== -->
+        <div class="section" style="display:block; margin-bottom: 30px;">
+            <div class="section-title">
+                <h2>أفضل 3 معلمين لك</h2>
+                <p>استنادًا إلى تفضيلاتك (المستوى، المواد، الوقت، الميزانية)، إليك القمة مع درجات تطابق مرئية.</p>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:20px; margin-bottom:20px;">
+                <div style="flex:1; min-width:260px;">
+                    <canvas id="tutorFitDonut" width="260" height="220"></canvas>
+                </div>
+                <div style="flex:1; min-width:260px;">
+                    <p style="margin:0; color: var(--text-muted);">عرض بياني لحالات تطابق أفضل 3 معلمين.</p>
+                    <ul id="tutorFitLegend" style="margin-top:10px; padding-left: 18px; color: var(--text-muted);"></ul>
+                </div>
+            </div>
+
+            {% if best_matches_top3 and best_matches_top3|length > 0 %}
+            <div id="top3TeachersContainer" class="card-grid">
+                {% for rec in best_matches_top3 %}
+                <div class="card" style="border: 2px solid #6366f1;">
+                    <div class="tutor-avatar">{{ rec.tutor.name[0] if rec.tutor.name else 'A' }}</div>
+                    <h3 style="margin: 0 0 5px 0;">أ. {{ rec.tutor.name }}</h3>
+                    <div class="badge subject-badge">{{ rec.tutor.subject }}</div>
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.8; min-height: 65px;">{{ rec.tutor.bio or 'معلم مميز' }}</p>
+
+                    <div style="margin-bottom: 10px;">
+                        <strong>درجة التوافق: {{ rec.score }} / 100</strong>
+                        <div style="font-size:12px; color:#64748b;">{{ rec.confidence }}% تطابق</div>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-fill" data-score="{{ rec.score }}"></div>
+                    </div>
+
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+                        {% for reason in rec.reasons[:3] %}
+                        <span class="badge" style="background:#eef2ff; color:#3730a3; font-size:12px;">{{ reason }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div style="display:flex; gap:8px; justify-content:flex-end;">
+                        <a href="/recommend?subject={{ rec.tutor.subject }}" class="btn btn-ai" style="padding:8px 10px; font-size:12px;">عرض التوصية المتقدمة</a>
+                        <button class="btn btn-primary" style="padding:8px 10px; font-size:12px;" onclick="openModal('{{ rec.tutor.id }}', '{{ rec.tutor.name }}')">حجز حصتك</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div id="top3TeachersContainer" class="card-grid"></div>
+            <div class="empty-state">لن تتمكن من رؤية المعلمين المتوافقين حتى تكمل تفضيلاتك.</div>
+            {% endif %}
+
+            <div style="margin-top: 10px; text-align: right;">
+                <a href="{{ url_for('edit_preferences') }}" class="btn btn-primary" style="display:inline-block; padding:10px 12px; font-size:13px;">تعديل تفضيلاتي</a>
+            </div>
+        </div>
+
+        <!-- ===== SECTION: المعلمون ===== -->
+        <div id="tutors-sec" class="section active">
+            <div class="section-title">
+                <h2>اختر معلمك المفضل</h2>
+                <p>تصفح قائمة المعلمين المتاحين واحجز الحصة المناسبة لك.</p>
+            </div>
+
+            {% if tutors %}
+            <div class="card-grid">
+                {% for tutor in tutors %}
+                <div class="card">
+                    <div class="tutor-avatar">{{ tutor.name[0] }}</div>
+                    <h3 style="margin: 0 0 5px 0;">أ. {{ tutor.name }}</h3>
+
+                    <div class="badge subject-badge">{{ tutor.subject }}</div>
+
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.8; min-height: 65px;">
+                        {{ tutor.bio or "معلم متميز متخصص في تقديم شرح مبسط ومتابعة مستمرة للطلاب." }}
+                    </p>
+
+                    <div
+                        style="border-top: 1px solid #f1f5f9; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700;">${{ tutor.hourly_rate }} <small>/ ساعة</small></span>
+                        <button class="btn btn-primary" style="width: auto;"
+                            onclick="openModal('{{ tutor.id }}', '{{ tutor.name }}')">
+                            حجز حصة
+                        </button>
+                    </div>
+
+                    <!-- ✅ زر AI Recommendation -->
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <a href="/recommend?subject={{ tutor.subject }}" class="btn btn-ai" style="flex:1; min-width:160px;">
+                            🤖 توصية AI لهذه المادة
+                        </a>
+                        <form method="POST" action="{{ url_for('activate_recommendation', tutor_id=tutor.id) }}" style="margin:0;">
+                            <button type="submit" class="btn btn-ai" style="background:#f59e0b; width:100%; min-width:160px;">✅ تفعيل التوصية الآن</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">لا يوجد معلمون متاحون حالياً.</div>
+            {% endif %}
+        </div>
+
+        <!-- ===== SECTION: الجلسات ===== -->
+        <div id="sessions-sec" class="section">
+            <div class="section-title">
+                <h2>جدول الحصص</h2>
+                <p>تابع حالة جلساتك القادمة والمقبولة.</p>
+            </div>
+
+            {% if sessions %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المعلم</th>
+                            <th>الموعد</th>
+                            <th>الحالة</th>
+                            <th>الإجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in sessions %}
+                        <tr>
+                            <td><b>أ. {{ s.tutor_name }}</b></td>
+                            <td>{{ s.session_date }}</td>
+                            <td>
+                                <span
+                                    class="badge {{ 'status-confirmed' if s.status == 'confirmed' else 'status-pending' }}">
+                                    {{ 'مقبول ✅' if s.status == 'confirmed' else 'قيد الانتظار ⏳' }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if s.status == 'confirmed' and s.meeting_link %}
+                                <a href="{{ s.meeting_link }}" target="_blank" class="btn btn-meet"
+                                    style="padding: 8px 15px;">
+                                    دخول الجلسة <i class="fas fa-video"></i>
+                                </a>
+                                {% elif s.status == 'confirmed' %}
+                                <span style="color: var(--text-muted); font-size: 12px;">بانتظار رابط الجلسة</span>
+                                {% else %}
+                                <span style="color: var(--text-muted); font-size: 12px;">انتظر القبول</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">لا توجد لديك جلسات حالياً.</div>
+            {% endif %}
+        </div>
+
+        <!-- ===== SECTION: المكتبة ===== -->
+        <div id="resources-sec" class="section">
+            <div class="section-title">
+                <h2>المكتبة التعليمية</h2>
+                <p>راجع الملفات والروابط التعليمية المضافة من المعلمين.</p>
+            </div>
+
+            {% if resources %}
+            <div class="card-grid">
+                {% for r in resources %}
+                <div class="card">
+                    <h3 style="margin-top: 0;">{{ r.title }}</h3>
+                    <p style="color: var(--text-muted); font-size: 14px; line-height: 1.8;">
+                        {{ r.description or "مورد تعليمي لمساعدتك في الدراسة والفهم بشكل أفضل." }}
+                    </p>
+                    <div style="margin: 14px 0;">
+                        <span class="badge subject-badge">{{ r.subject or 'عام' }}</span>
+                    </div>
+                    <a href="{{ r.link }}" target="_blank" class="resource-link">فتح المورد</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">لا توجد موارد تعليمية متاحة حالياً.</div>
+            {% endif %}
+        </div>
+
+        <!-- ===== SECTION: الواجبات ===== -->
+        <div id="tasks-sec" class="section">
+            <div class="section-title">
+                <h2>المهام والواجبات</h2>
+                <p>تابع الواجبات المطلوبة منك وقم بتسليمها من هنا.</p>
+            </div>
+
+            {% if assignments %}
+            <div class="card-grid">
+                {% for a in assignments %}
+                <div class="card">
+                    <h3 style="margin-top:0;">{{ a.title }}</h3>
+                    <p style="margin:8px 0; color: var(--text-muted);"><strong>المعلم:</strong> أ. {{ a.tutor_name }}
+                    </p>
+                    <p style="margin:8px 0; color: var(--text-muted);"><strong>الوصف:</strong> {{ a.description or '-'
+                        }}</p>
+                    <p style="margin:8px 0; color: var(--text-muted);"><strong>تاريخ التسليم:</strong> {{ a.due_date }}
+                    </p>
+
+                    {% if a.submission_id %}
+                    <div style="margin: 12px 0;">
+                        <span
+                            class="badge {{ 'status-confirmed' if a.submission_status == 'graded' else 'status-pending' }}">
+                            {{ 'تم التقييم' if a.submission_status == 'graded' else 'تم التسليم' }}
+                        </span>
+                    </div>
+
+                    {% if a.submitted_at %}
+                    <p style="font-size: 13px; color: var(--text-muted);">
+                        <strong>تاريخ التسليم:</strong> {{ a.submitted_at }}
+                    </p>
+                    {% endif %}
+
+                    {% if a.submission_file %}
+                    <p style="font-size: 13px;">
+                        <a class="resource-link"
+                            href="{{ url_for('static', filename='submissions/' + a.submission_file) }}" target="_blank">
+                            فتح الملف المرفوع
+                        </a>
+                    </p>
+                    {% endif %}
+                    {% endif %}
+
+                    <form action="{{ url_for('submit_assignment', assignment_id=a.id) }}" method="POST"
+                        enctype="multipart/form-data" style="margin-top: 15px;">
+                        <textarea name="submission_text" rows="4" placeholder="اكتب إجابتك هنا..." {% if
+                            a.submission_status=='graded' %}disabled{% endif %}>{{ a.submission_text or '' }}</textarea>
+
+                        <input type="file" name="submission_file" {% if a.submission_status=='graded' %}disabled{% endif
+                            %} style="margin-top: 10px;">
+
+                        {% if a.submission_status == 'graded' %}
+                        <button type="button" class="btn btn-primary"
+                            style="width:100%; margin-top: 12px; opacity: 0.7; cursor: not-allowed;">
+                            تم تقييم الواجب
+                        </button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 12px;">
+                            {{ 'تحديث التسليم' if a.submission_id else 'تسليم الواجب' }}
+                        </button>
+                        {% endif %}
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">لا توجد واجبات حالياً.</div>
+            {% endif %}
+        </div>
+
+        <!-- ===== SECTION: الاختبارات ✅ (مصلح) ===== -->
+        <div id="quizzes-sec" class="section">
+            <div class="section-title">
+                <h2>الاختبارات</h2>
+                <p>أجب على الاختبارات المنشورة من معلميك.</p>
+            </div>
+
+            {% if quizzes %}
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
+                {% for quiz in quizzes %}
+                <div class="quiz-card">
+                    <h4>{{ quiz.title }}</h4>
+                    <small>
+                        <i class="fas fa-clock" style="margin-left:4px;"></i>
+                        المدة: {{ quiz.duration_minutes }} دقيقة
+                    </small>
+
+                    <div style="margin-top: 10px;">
+                        {% if quiz.result_id %}
+                        <!-- الطالب حل الاختبار -->
+                        <span class="quiz-done-badge">
+                            <i class="fas fa-check-circle"></i>
+                            تم الحل: {{ quiz.score }} / {{ quiz.total }}
+                        </span>
+                        {% else %}
+                        <!-- لم يحل بعد -->
+                        <a href="{{ url_for('take_quiz', quiz_id=quiz.id) }}" class="btn btn-primary"
+                            style="width:100%; justify-content:center;">
+                            <i class="fas fa-play"></i>
+                            بدء الاختبار
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">لا يوجد اختبارات حالياً.</div>
+            {% endif %}
+        </div>
+
+        <!-- ===== SECTION: النتائج ===== -->
+        <div id="grades-sec" class="section">
+            <div class="section-title">
+                <h2>نتائجي</h2>
+                <p>تابع نتائجك وتقييمات الواجبات المرسلة لك.</p>
+            </div>
+
+            {% if grades %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الواجب</th>
+                            <th>الدرجة</th>
+                            <th>من</th>
+                            <th>النسبة</th>
+                            <th>الملاحظات</th>
+                            <th>تاريخ التقييم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in grades %}
+                        <tr>
+                            <td>{{ g.assignment_title or 'واجب' }}</td>
+                            <td><b>{{ g.score }}</b></td>
+                            <td>{{ g.total_score }}</td>
+                            <td>
+                                {% if g.total_score and g.total_score > 0 %}
+                                {{ ((g.score / g.total_score) * 100) | round(1) }}%
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>{{ g.feedback or '-' }}</td>
+                            <td>{{ g.grade_date or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">لا توجد درجات متاحة حالياً.</div>
+            {% endif %}
+        </div>
+
+    </div><!-- /main-content -->
+
+    <!-- ===== BOOKING MODAL ===== -->
+    <div id="bookingModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 id="m-tutor" style="margin-top: 0;"></h3>
+            <form action="{{ url_for('book_session') }}" method="POST">
+                <input type="hidden" name="tutor_id" id="m-id">
+                <input type="datetime-local" name="session_date" required>
+                <button type="submit" class="btn btn-primary" style="width:100%">إرسال طلب الحجز</button>
+                <button type="button" onclick="closeModal()"
+                    style="background:none; border:none; color: var(--text-muted); margin-top: 15px; cursor: pointer; font-size: 15px;">
+                    إلغاء
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function showSection(id, el = null) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            const section = document.getElementById(id);
+            if (section) section.classList.add('active');
+
+            if (el) {
+                el.classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    const clickValue = item.getAttribute('onclick');
+                    if (clickValue && clickValue.includes(id)) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+
+            localStorage.setItem('activeStudentTab', id);
+        }
+
+        function toggleNotifs() {
+            const box = document.getElementById('notifBox');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function openModal(id, name) {
+            document.getElementById('m-id').value = id;
+            document.getElementById('m-tutor').innerText = "حجز مع " + name;
+            document.getElementById('bookingModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        window.onload = function () {
+            const activeTab = localStorage.getItem('activeStudentTab') || 'tutors-sec';
+            showSection(activeTab);
+        };
+
+        window.onclick = function (e) {
+            const modal = document.getElementById('bookingModal');
+            const notifBox = document.getElementById('notifBox');
+
+            if (e.target === modal) closeModal();
+
+            if (!e.target.closest('#notifBox') && !e.target.closest('[onclick="toggleNotifs()"]')) {
+                notifBox.style.display = 'none';
+            }
+        };
+
+        function tutorScoreColor(score) {
+            if (score >= 80) return '#16a34a';
+            if (score >= 60) return '#d97706';
+            return '#dc2626';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const donutData = [];
+            const donutLabels = [];
+            const donutColors = [];
+
+            document.querySelectorAll('.progress-fill').forEach((el, index) => {
+                const score = Number(el.getAttribute('data-score') || 0);
+                const capped = Math.max(0, Math.min(100, score));
+                el.style.width = capped + '%';
+
+                const color = tutorScoreColor(capped);
+                el.style.background = color;
+
+                const card = el.closest('.card');
+                let name = `معلم ${index + 1}`;
+                if (card) {
+                    const title = card.querySelector('h3');
+                    if (title) name = title.innerText.trim();
+                }
+
+                if (index < 3) {
+                    donutData.push(capped);
+                    donutLabels.push(name);
+                    donutColors.push(color);
+                }
+            });
+
+            const chartCtx = document.getElementById('tutorFitDonut');
+            if (chartCtx && donutData.length > 0 && typeof Chart !== 'undefined') {
+                new Chart(chartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: donutLabels,
+                        datasets: [{
+                            data: donutData,
+                            backgroundColor: donutColors,
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: true }
+                        }
+                    }
+                });
+
+                const legend = document.getElementById('tutorFitLegend');
+                if (legend) {
+                    legend.innerHTML = donutLabels.map((label, i) =>
+                        `<li style="margin-bottom:6px; font-size:13px;"><span style="display:inline-block;width:12px;height:12px;background:${donutColors[i]};margin-left:6px;border-radius:50%;"></span>${label}: ${donutData[i]}%</li>`
+                    ).join('');
+                }
+            }
+        });
+
+        function updateMatchSummary(data) {
+            document.getElementById('matched-courses').innerText = data.matched_subjects.length ? data.matched_subjects.join(', ') : 'لا يوجد حاليًا';
+            document.getElementById('remaining-courses').innerText = data.remaining_subjects.length ? data.remaining_subjects.join(', ') : 'لا يوجد';
+
+            if (data.best_matches && data.best_matches.length > 0) {
+                const notify = document.getElementById('match-summary');
+                notify.style.borderColor = '#34d399';
+            }
+
+            renderTop3Teachers(data.best_matches_top3 || []);
+        }
+
+        function renderTop3Teachers(list) {
+            const container = document.getElementById('top3TeachersContainer');
+            if (!container) return;
+
+            if (!list || list.length === 0) {
+                container.innerHTML = '<div class="empty-state">لا توجد توصيات متاحة حاليًا. الرجاء تحديث تفضيلاتك أو التحقق من توفر المعلمين.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.border = '2px solid #6366f1';
+
+                const name = item.name || 'معلم';
+                const que = item.subject || 'غير محدد';
+                const reasons = (item.reasons || []).slice(0, 3).map(r => `<span class="badge" style="background:#eef2ff; color:#3730a3; font-size:12px; margin-right:4px;">${r}</span>`).join('');
+                const score = Number(item.score || 0);
+                const conf = Number(item.confidence || 0);
+                const color = tutorScoreColor(score);
+
+                card.innerHTML = `
+                    <div class="tutor-avatar">${name.charAt(0)}</div>
+                    <h3 style="margin: 0 0 5px 0;">أ. ${name}</h3>
+                    <div class="badge subject-badge">${que}</div>
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.8; min-height: 65px;">${item.bio || 'معلم مميز'}</p>
+                    <div style="margin-bottom: 10px;"><strong>درجة التوافق: ${score} / 100</strong><div style="font-size:12px; color:#64748b;">${conf}% تطابق</div></div>
+                    <div class="progress"><div class="progress-fill" data-score="${score}" style="width:${Math.max(0,Math.min(100,score))}%; background:${color};"></div></div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">${reasons}</div>
+                    <div style="display:flex; gap:8px; justify-content:flex-end;"><a href="/recommend?subject=${encodeURIComponent(que)}" class="btn btn-ai" style="padding:8px 10px; font-size:12px;">عرض التوصية المتقدمة</a><button class="btn btn-primary" style="padding:8px 10px; font-size:12px;" onclick="openModal(${item.tutor_id}, '${name}')">حجز حصتك</button></div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            // Update donut chart static in current DOM from rendered elements
+            const scoreEls = container.querySelectorAll('.progress-fill');
+            const donutData = [];
+            const donutLabels = [];
+            const donutColors = [];
+            scoreEls.forEach((el, idx) => {
+                const sc = Number(el.getAttribute('data-score') || 0);
+                donutData.push(sc);
+                const card = el.closest('.card');
+                const title = card ? card.querySelector('h3') : null;
+                donutLabels.push(title ? title.innerText.trim() : `معلم ${idx + 1}`);
+                donutColors.push(tutorScoreColor(sc));
+            });
+
+            const chartCtx = document.getElementById('tutorFitDonut');
+            if (chartCtx && typeof Chart !== 'undefined') {
+                new Chart(chartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: donutLabels,
+                        datasets: [{ data: donutData, backgroundColor: donutColors, borderColor: '#ffffff', borderWidth: 2 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: true } } }
+                });
+
+                const legend = document.getElementById('tutorFitLegend');
+                if (legend) {
+                    legend.innerHTML = donutLabels.map((label, i) =>
+                        `<li style="margin-bottom:6px; font-size:13px;"><span style="display:inline-block;width:12px;height:12px;background:${donutColors[i]};margin-left:6px;border-radius:50%;"></span>${label}: ${donutData[i]}%</li>`
+                    ).join('');
+                }
+            }
+        }
+
+        async function fetchStudentMatches() {
+            try {
+                const response = await fetch("{{ url_for('student_matches') }}");
+                if (!response.ok) return;
+                const data = await response.json();
+                updateMatchSummary(data);
+            } catch (err) {
+                console.error('Error fetching match data', err);
+            }
+        }
+
+        document.getElementById('refreshMatchesBtn').addEventListener('click', function() {
+            fetchStudentMatches();
+            flashMessage('تم تحديث التوصيات.', 'success');
+        });
+
+        // Auto-refresh every 30 seconds to reflect teacher curriculum updates instantly
+        setInterval(fetchStudentMatches, 30000);
+
+        function flashMessage(message, type) {
+            const container = document.createElement('div');
+            container.className = 'alert-banner ' + (type === 'success' ? 'alert-success' : 'alert-info');
+            container.style.marginBottom = '10px';
+            container.innerHTML = message;
+            const main = document.querySelector('.main-content');
+            main.insertBefore(container, main.firstChild);
+            setTimeout(() => container.remove(), 4000);
+        }
+
+    </script>
+
+</body>
+
+</html>

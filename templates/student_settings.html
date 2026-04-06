@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات الطالب | Smart Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --danger-bg: #fee2e2;
+            --danger-text: #991b1b;
+            --info-bg: #dbeafe;
+            --info-text: #1d4ed8;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            margin: 0;
+            padding: 25px;
+            direction: rtl;
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--primary);
+            margin-bottom: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .page-head {
+            margin-bottom: 25px;
+        }
+
+        .page-head h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .page-head p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 28px;
+            border-radius: 22px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: none;
+        }
+
+        .profile-card {
+            text-align: center;
+            height: fit-content;
+        }
+
+        .profile-img-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 18px;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            background: #fff;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .profile-card h3 {
+            margin: 0 0 6px;
+            font-size: 24px;
+        }
+
+        .profile-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0 0 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            background: #e0e7ff;
+            color: var(--primary);
+        }
+
+        .info-box {
+            margin-top: 22px;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: right;
+        }
+
+        .info-box div {
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .info-box div:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-box strong {
+            color: var(--text-main);
+        }
+
+        .form-card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 15px;
+            background: white;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .btn {
+            cursor: pointer;
+            border-radius: 12px;
+            border: none;
+            font-weight: 800;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 24px;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: #eef2f7;
+            color: #475569;
+        }
+
+        .alert {
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .alert-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        .alert-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+        }
+
+        .alert-info {
+            background: var(--info-bg);
+            color: var(--info-text);
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="{{ url_for('student_dashboard') }}" class="back-link">
+        <i class="fas fa-arrow-right"></i>
+        العودة للوحة الطالب
+    </a>
+
+    <div class="page-head">
+        <h1>إعدادات الطالب</h1>
+        <p>حدّث بيانات حسابك الشخصية والبريد الإلكتروني والصورة الشخصية بسهولة.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {% if category == 'success' %}alert-success{% elif category == 'danger' %}alert-danger{% else %}alert-info{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('student_settings') }}" method="POST" enctype="multipart/form-data">
+        <div class="layout">
+            <div class="card profile-card">
+                <div class="profile-img-container">
+                    <img id="preview" src="{{ url_for('display_image', filename=student.profile_pic) if student.profile_pic else 'https://via.placeholder.com/150' }}" class="profile-img" alt="Student">
+                    <label for="profile_pic" class="upload-btn">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                </div>
+
+                <input type="file" name="profile_pic" id="profile_pic" class="form-control" accept="image/*" style="display:none;">
+
+                <h3>{{ student.name }}</h3>
+                <p>{{ student.email }}</p>
+                <div class="badge">حساب طالب نشط</div>
+
+                <div class="info-box">
+                    <div>الاسم: <strong>{{ student.name }}</strong></div>
+                    <div>البريد: <strong>{{ student.email }}</strong></div>
+                </div>
+            </div>
+
+            <div class="card form-card">
+                <h2>تعديل معلومات الحساب</h2>
+
+                <div class="form-group">
+                    <label>الاسم بالكامل</label>
+                    <input type="text" name="name" value="{{ student.name }}" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" name="email" value="{{ student.email }}" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>كلمة المرور الجديدة</label>
+                    <input type="password" name="password" placeholder="اتركها فارغة للإبقاء على الحالية" class="form-control">
+                    <div class="hint">لن يتم تغيير كلمة المرور إذا تركت الحقل فارغًا.</div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                    <a href="{{ url_for('student_dashboard') }}" class="btn btn-secondary">إلغاء والعودة</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('profile_pic').onchange = function () {
+        const [file] = this.files;
+        if (file) {
+            document.getElementById('preview').src = URL.createObjectURL(file);
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tutor | منصة التعليم الذكية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1E88E5;
+            --primary-dark: #1565C0;
+            --secondary: #6366f1;
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #64748b;
+            --dark-bg: #111827;
+            --dark-card: #1f2937;
+            --dark-text: #f9fafb;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: 0.3s;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        body.dark {
+            background: #111827;
+            color: var(--dark-text);
+        }
+
+        body.dark header {
+            background: rgba(17, 24, 39, 0.95);
+        }
+
+        body.dark .card,
+        body.dark .course-card,
+        body.dark .testimonial-card,
+        body.dark .tutor-display-card,
+        body.dark .info-strip {
+            background: var(--dark-card);
+            color: var(--dark-text);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+        }
+
+        body.dark .course-card p,
+        body.dark .testimonial-card p,
+        body.dark .info-strip p,
+        body.dark .tutor-display-card p {
+            color: #cbd5e1;
+        }
+
+        body.dark footer {
+            background: #020617;
+            color: #cbd5e1;
+        }
+
+        header {
+            background: rgba(30, 136, 229, 0.96);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        header nav a {
+            color: white;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        header nav a:hover {
+            color: #dbeafe;
+        }
+
+        .toggle-dark {
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: white;
+            color: var(--primary);
+            font-weight: 700;
+            border: none;
+            font-family: inherit;
+        }
+
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 170px 20px 120px;
+            background: linear-gradient(135deg, #42A5F5, #1E88E5);
+            border-radius: 0 0 40% 40% / 12%;
+            animation: fadeIn 1.2s;
+            color: white;
+        }
+
+        .hero h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 50px;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
+            max-width: 780px;
+            margin-right: auto;
+            margin-left: auto;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .hero-actions a {
+            padding: 15px 30px;
+            border-radius: 10px;
+            display: inline-block;
+            transition: 0.3s;
+            font-weight: 700;
+        }
+
+        .hero-actions .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .hero-actions .btn-secondary {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero-actions a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+        }
+
+       .info-strip {
+    max-width: 1100px;
+    margin: 30px auto 40px;
+    background: white;
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+        .info-strip h3 {
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .info-strip p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 50px auto;
+            max-width: 1200px;
+            gap: 28px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            width: 320px;
+            padding: 32px 24px;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: 0.4s;
+            opacity: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+        }
+
+        .card img {
+            width: 90px;
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+            font-size: 22px;
+            color: var(--primary);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.7;
+            min-height: 52px;
+        }
+
+        .card a {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .courses-section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .courses-section h2,
+        .testimonials-section h2,
+        .tutors-title {
+            font-size: 36px;
+            color: var(--primary);
+            margin-bottom: 14px;
+            font-family: 'Montserrat';
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            line-height: 1.8;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 28px;
+        }
+
+        .course-card {
+            background: white;
+            padding: 36px 24px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transition: 0.4s;
+            opacity: 0;
+            border-top: 6px solid var(--primary);
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .course-card h4 {
+            margin-bottom: 12px;
+            font-size: 22px;
+        }
+
+        .course-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .icon-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .testimonials-section {
+            background: #eef2f7;
+            padding: 80px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .testimonials-grid {
+            display: flex;
+            overflow-x: auto;
+            gap: 24px;
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 10px 10px 20px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 38px 28px;
+            border-radius: 20px;
+            min-width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+            opacity: 0;
+            scroll-snap-align: center;
+            text-align: right;
+        }
+
+        .quote-mark {
+            position: absolute;
+            top: 12px;
+            left: 20px;
+            font-size: 50px;
+            color: var(--primary);
+            opacity: 0.1;
+            font-family: serif;
+        }
+
+        .testimonial-card p {
+            font-style: italic;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            color: #FFB300;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        #tutors-explore-section {
+            display: none;
+            padding: 70px 20px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .tutors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+        }
+
+        .tutor-display-card {
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            transition: 0.3s;
+        }
+
+        .tutor-display-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .tutor-display-card img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--primary);
+        }
+
+        .tutor-display-card h4 {
+            margin-bottom: 8px;
+            font-size: 22px;
+        }
+
+        .tutor-display-card p {
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .newsletter {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+            padding: 55px 20px;
+            border-radius: 22px;
+            margin: 80px auto;
+            max-width: 950px;
+        }
+
+        .newsletter h2 {
+            margin-bottom: 14px;
+            font-size: 34px;
+            font-family: 'Montserrat';
+        }
+
+        .newsletter p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+
+        .newsletter .cta-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .newsletter a {
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 800;
+            display: inline-block;
+        }
+
+        .newsletter .cta-main {
+            background: white;
+            color: var(--primary);
+        }
+
+        .newsletter .cta-alt {
+            background: rgba(255,255,255,0.12);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        footer {
+            background: #263238;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            line-height: 1.8;
+        }
+
+        #backToTop {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 52px;
+            height: 52px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 10px 20px rgba(30,136,229,0.25);
+        }
+
+        @media (max-width: 850px) {
+            header {
+                padding: 14px 18px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            header nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 190px 20px 110px;
+                border-radius: 0 0 20% 20% / 8%;
+            }
+
+            .hero h2 {
+                font-size: 34px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .info-strip {
+                margin: -25px 16px 30px;
+            }
+
+            .card,
+            .course-card,
+            .testimonial-card,
+            .tutor-display-card {
+                opacity: 1 !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="header">
+        <h1>Smart Tutor</h1>
+        <nav>
+            <a href="#home">الرئيسية</a>
+            <a href="#courses">الدورات</a>
+            <a href="javascript:void(0)" onclick="toggleTutorsSection()">المعلمون</a>
+            <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+            <button class="toggle-dark" onclick="toggleDark()">🌓</button>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h2>تعلّم مع أفضل المعلمين</h2>
+        <p>منصة تعليمية ذكية تربط الطالب بالمعلم المناسب، وتمنحك تجربة تعلم مرنة، منظمة، وسهلة الإدارة.</p>
+        <div class="hero-actions">
+            <a href="{{ url_for('login') }}" class="btn-primary">ابدأ الآن</a>
+            <a href="javascript:void(0)" onclick="toggleTutorsSection()" class="btn-secondary">استعرض المعلمين</a>
+        </div>
+    </section>
+
+    <div class="info-strip">
+        <h3>منصة بإدارة مركزية وبيئة تعليمية منظمة</h3>
+        <p>
+            يتم إنشاء الحسابات داخل النظام من خلال الإدارة فقط، مما يساعد على تنظيم العملية التعليمية، متابعة الطلاب والمعلمين، وضمان تجربة أكثر احترافية داخل المنصة.
+        </p>
+    </div>
+
+    <section class="cards">
+        <div class="card">
+            <img src="https://img.icons8.com/color/96/000000/login-rounded-right.png" alt="Login">
+            <h3>الدخول إلى حسابك</h3>
+            <p>سجّل الدخول بحسابك الحالي للوصول إلى لوحة الطالب أو المعلم أو الإدارة.</p>
+            <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+        </div>
+
+        <div class="card">
+            <img src="https://img.icons8.com/color/96/000000/administrator-male.png" alt="Admin">
+            <h3>الحسابات تُنشأ من الإدارة</h3>
+            <p>لا يوجد تسجيل ذاتي مباشر. يتم إنشاء الحسابات من خلال الأدمن لضمان تنظيم النظام وصحة البيانات.</p>
+            <a href="{{ url_for('login') }}">دخول الإدارة</a>
+        </div>
+
+        <div class="card">
+            <img src="https://img.icons8.com/color/96/000000/classroom.png" alt="Tutors">
+            <h3>استعرض المعلمين</h3>
+            <p>شاهد قائمة المعلمين المتاحين وتعرّف على التخصصات المعروضة داخل المنصة.</p>
+            <a href="javascript:void(0)" onclick="toggleTutorsSection()" id="exploreBtn">استكشاف</a>
+        </div>
+    </section>
+
+    <section id="tutors-explore-section">
+        <h2 class="tutors-title">نخبة المعلمين</h2>
+        <p class="section-subtitle">استعرض مجموعة من المعلمين المتاحين داخل المنصة وتعرف على تخصصاتهم.</p>
+
+        <div class="tutors-grid">
+            {% if tutors %}
+                {% for tutor in tutors %}
+                <div class="tutor-display-card">
+                    <img src="{{ url_for('display_image', filename=tutor.profile_pic) if tutor.profile_pic else 'https://img.icons8.com/bubbles/100/000000/user.png' }}" alt="Tutor">
+                    <h4>{{ tutor.name }}</h4>
+                    <p style="color: var(--primary); font-weight: 700;">{{ tutor.subject }}</p>
+                    <div class="stars">★★★★★</div>
+                    <a href="{{ url_for('login') }}" style="margin-top:15px; display:inline-block; font-weight:bold; color: var(--primary);">احجز جلسة</a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="tutor-display-card">
+                    <img src="https://img.icons8.com/bubbles/100/000000/user-male-circle.png" alt="Tutor">
+                    <h4>Dr. Ahmed Mansour</h4>
+                    <p>Mathematics Expert</p>
+                    <div class="stars">★★★★★</div>
+                    <a href="{{ url_for('login') }}" style="color: var(--primary); font-weight:bold;">عرض الملف</a>
+                </div>
+
+                <div class="tutor-display-card">
+                    <img src="https://img.icons8.com/bubbles/100/000000/female-user-circle.png" alt="Tutor">
+                    <h4>Laila Hassan</h4>
+                    <p>Language Specialist</p>
+                    <div class="stars">★★★★★</div>
+                    <a href="{{ url_for('login') }}" style="color: var(--primary); font-weight:bold;">عرض الملف</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="courses-section" id="courses">
+        <h2>الدورات الشائعة</h2>
+        <p class="section-subtitle">بعض المجالات التعليمية الأكثر طلبًا داخل منصتنا.</p>
+
+        <div class="courses-grid">
+            <div class="course-card">
+                <div class="icon-container" style="background:#E3F2FD; color:#1E88E5;">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h4>الرياضيات المتقدمة</h4>
+                <p>طوّر مهاراتك في المعادلات، الجبر، والهندسة مع معلمين متخصصين وخطط واضحة.</p>
+            </div>
+
+            <div class="course-card">
+                <div class="icon-container" style="background:#E8F5E9; color:#2E7D32;">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h4>العلوم</h4>
+                <p>استكشف الفيزياء، الكيمياء، والأحياء بطريقة مبسطة وتفاعلية تناسب مختلف المستويات.</p>
+            </div>
+
+            <div class="course-card">
+                <div class="icon-container" style="background:#FFF3E0; color:#EF6C00;">
+                    <i class="fas fa-language"></i>
+                </div>
+                <h4>اللغات</h4>
+                <p>تعلّم اللغات بثقة مع معلمين محترفين وجلسات تساعدك على التقدم خطوة بخطوة.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials-section">
+        <h2>آراء الطلاب</h2>
+        <p class="section-subtitle">بعض الانطباعات عن تجربة التعلم داخل Smart Tutor.</p>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <span class="quote-mark">“</span>
+                <p>"Smart Tutor ساعدني كثيرًا في تنظيم دراستي وفهم المواد بشكل أفضل. المنصة سهلة جدًا."</p>
+                <h4 style="color:var(--primary);">- Sarah L.</h4>
+                <div class="stars">★★★★★</div>
+            </div>
+
+            <div class="testimonial-card">
+                <span class="quote-mark">“</span>
+                <p>"وجدت معلم الفيزياء المناسب بسرعة، وكانت تجربة الحصص المباشرة ممتازة جدًا."</p>
+                <h4 style="color:var(--primary);">- John D.</h4>
+                <div class="stars">★★★★★</div>
+            </div>
+
+            <div class="testimonial-card">
+                <span class="quote-mark">“</span>
+                <p>"أكثر شيء أعجبني هو سهولة الوصول للواجبات والموارد وكل شيء في مكان واحد."</p>
+                <h4 style="color:var(--primary);">- Emily R.</h4>
+                <div class="stars">★★★★★</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <h2>جاهز للدخول إلى المنصة؟</h2>
+        <p>إذا كان لديك حساب جاهز من الإدارة، يمكنك تسجيل الدخول الآن والبدء باستخدام النظام مباشرة.</p>
+        <div class="cta-row">
+            <a href="{{ url_for('login') }}" class="cta-main">تسجيل الدخول</a>
+            <a href="javascript:void(0)" onclick="toggleTutorsSection()" class="cta-alt">استعراض المعلمين</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Smart Tutor. منصة تعليمية ذكية لتنظيم التعلم وإدارة الجلسات والواجبات والموارد.</p>
+    </footer>
+
+    <div id="backToTop" onclick="scrollToTop()">↑</div>
+
+    <script>
+        function toggleTutorsSection() {
+            const section = document.getElementById('tutors-explore-section');
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        const faders = document.querySelectorAll('.card, .course-card, .testimonial-card');
+        const appearOptions = { threshold: 0.2 };
+
+        const appearOnScroll = new IntersectionObserver(function (entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.style.opacity = 1;
+                entry.target.style.animation = "fadeInUp 0.8s ease forwards";
+                observer.unobserve(entry.target);
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => appearOnScroll.observe(fader));
+
+        function toggleDark() {
+            document.body.classList.toggle("dark");
+        }
+
+        window.addEventListener("scroll", function () {
+            const header = document.getElementById("header");
+            const backBtn = document.getElementById("backToTop");
+
+            if (window.pageYOffset > 100) {
+                header.style.background = "rgba(30, 136, 229, 0.95)";
+                backBtn.style.display = "flex";
+            } else {
+                header.style.background = "rgba(30, 136, 229, 0.96)";
+                backBtn.style.display = "none";
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
